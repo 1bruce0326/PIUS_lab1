@@ -15,7 +15,7 @@ class Employee
         $this->id = $id;
         $this->name = $name;
         $this->salary = $salary;
-        $this->hireDate = $hireDate;
+        $this->hireDate = new DateTime($hireDate);
 
         $this->validate();
     }
@@ -49,6 +49,17 @@ class Employee
         ]);
         $this->handleViolations($violations, 'hireDate');
     }
+    
+    private function validateHireDate($hireDate)
+    {
+        $validator = Validation::createValidator();
+        $dateFormat = 'Y-m-d';
+        $date = DateTime::createFromFormat($dateFormat, $hireDate);
+
+        if (!$date || $date->format($dateFormat) !== $hireDate) {
+            $this->hireDate = null;
+        }
+    }
 
     private function handleViolations($violations, $fieldName)
     {
@@ -60,5 +71,12 @@ class Employee
             echo "$fieldName: Валидация прошла успешно!";
         }
         echo "<br>";
+    }
+
+    public function getExperienceYears()
+    {
+        $currentDate = new DateTime();
+        $difference = $currentDate->diff($this->hireDate);
+        return $difference->y;
     }
 }
