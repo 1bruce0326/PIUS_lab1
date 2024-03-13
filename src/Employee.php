@@ -49,17 +49,6 @@ class Employee
         ]);
         $this->handleViolations($violations, 'hireDate');
     }
-    
-    private function validateHireDate($hireDate)
-    {
-        $validator = Validation::createValidator();
-        $dateFormat = 'Y-m-d';
-        $date = DateTime::createFromFormat($dateFormat, $hireDate);
-
-        if (!$date || $date->format($dateFormat) !== $hireDate) {
-            $this->hireDate = null;
-        }
-    }
 
     private function handleViolations($violations, $fieldName)
     {
@@ -71,6 +60,11 @@ class Employee
             echo "$fieldName: Валидация прошла успешно!";
         }
         echo "<br>";
+    }
+
+    public function getSalary()
+    {
+        return $this->salary;
     }
 
     public function getExperienceYears()
